@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары Wildberries</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .filters, .parse-form { margin-bottom: 20px; }
+        .filters label, .parse-form label { margin-right: 10px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { cursor: pointer; background: #f0f0f0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Товары Wildberries</h2>
+
+    <form class="parse-form" id="parseForm">
+        <label>
+            Поисковый запрос:
+            <input type="text" id="query" name="query">
+        </label>
+        <span>или</span>
+        <label>
+            URL категории:
+            <input type="text" id="category_url" name="category_url">
+        </label>
+        <button type="submit">Запустить парсинг</button>
+        <span id="parseStatus"></span>
+    </form>
+
+    <div class="filters">
+        <label>
+            Цена от:
+            <input type="number" id="minPrice" value="0" min="0" style="width:80px;">
+        </label>
+        <label>
+            до:
+            <input type="number" id="maxPrice" value="100000" min="0" style="width:80px;">
+        </label>
+        <label>
+            Мин. рейтинг:
+            <input type="number" id="minRating" value="0" min="0" max="5" step="0.1" style="width:60px;">
+        </label>
+        <label>
+            Мин. отзывов:
+            <input type="number" id="minReviews" value="0" min="0" style="width:60px;">
+        </label>
+        <label>
+            Запрос:
+            <select id="requestQuerySelect" onchange="fetchProducts()">
+                <option value="">Все</option>
+            </select>
+        </label>
+        <button onclick="fetchProducts(); return false;">Применить фильтры</button>
+    </div>
+    <h3>Гистограмма цен</h3>
+<canvas id="priceHistogram" width="600" height="300"></canvas>
+
+<h3>Скидка vs Рейтинг</h3>
+<canvas id="discountVsRating" width="600" height="300"></canvas>
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable('title')">Название товара</th>
+                <th onclick="sortTable('price')">Цена</th>
+                <th onclick="sortTable('discounted_price')">Цена со скидкой</th>
+                <th onclick="sortTable('rating')">Рейтинг</th>
+                <th onclick="sortTable('reviews_count')">Количество отзывов</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="main.js"></script>
+</body>
+</html>
