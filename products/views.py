@@ -61,6 +61,8 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='queries')
     def get_queries(self, request):
-        queries = Product.objects.values_list(
-            'request_query', flat=True).distinct()
-        return Response(sorted(filter(None, queries)))
+        queries = Product.objects.values_list('request_query', flat=True)
+        # Уникализируем через set и убираем пустые значения
+        unique_queries = sorted({q.strip()
+                                for q in queries if q and q.strip()})
+        return Response(unique_queries)
