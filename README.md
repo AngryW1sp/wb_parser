@@ -22,7 +22,7 @@ WB Parser — это Django REST API для парсинга и анализа �
 ### 1. Клонируйте репозиторий и установите зависимости
 
 ```sh
-git clone [<your_repo_url>](https://github.com/AngryW1sp/wb_parser.git)
+git clone https://github.com/AngryW1sp/wb_parser.git
 cd wb_parser
 python -m venv venv
 venv\Scripts\activate  # Windows
