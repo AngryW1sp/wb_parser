@@ -1,8 +1,8 @@
 Django>=4.2
-djangorestframework
-django-filter
-requests
-retry
-django-cors-headers
-pandas
-matplotlib
+djangorestframework>=3.14
+django-filter>=23.0
+drf-yasg>=1.21
+celery>=5.3
+redis>=4.5
+matplotlib>=3.7
+django-cors-headers>=4.3
