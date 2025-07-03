@@ -3,11 +3,12 @@ from retry import retry
 
 
 class WbParserBase:
-    def __init__(self, headers=None):
+    def __init__(self, headers=None, pages=None):
         self.headers = headers or {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
         }
+        self.pages = int(pages) if pages else 50
 
     def get_data_from_json(self, json_file: dict) -> list:
         """Извлекаем из json данные (универсальный вариант, если структура отличается — переопределить в наследнике)"""
@@ -28,8 +29,8 @@ class WbParserBase:
 
 
 class WbParserCatalog(WbParserBase):
-    def __init__(self, catalog_url: str, headers=None):
-        super().__init__(headers)
+    def __init__(self, catalog_url: str, headers=None, pages=None):
+        super().__init__(headers, pages)
         self.catalog_url = catalog_url
 
     def get_catalogs_wb(self) -> dict:
@@ -106,7 +107,7 @@ class WbParserCatalog(WbParserBase):
             category = self.search_category_in_catalog(
                 catalog_url=self.catalog_url, catalog_list=catalog_data)
             data_list = []
-            for page in range(1, 51):
+            for page in range(1, self.pages + 1):
                 data = self.scrap_page(
                     page=page,
                     shard=category['shard'],
@@ -124,8 +125,8 @@ class WbParserCatalog(WbParserBase):
 
 
 class WbParserSearch(WbParserBase):
-    def __init__(self, search_query: str, headers=None):
-        super().__init__(headers)
+    def __init__(self, search_query: str, headers=None, pages=None):
+        super().__init__(headers, pages)
         self.search_query = search_query
 
     @retry(Exception, tries=-1, delay=0)
@@ -167,7 +168,7 @@ class WbParserSearch(WbParserBase):
     def parser(self):
         data_list = []
         try:
-            for page in range(1, 51):
+            for page in range(1, self.pages + 1):
                 data = self.scrap_page(query=self.search_query, page=page)
                 items = self.get_data_from_json(data)
                 print(f'Добавлено позиций: {len(items)}')
@@ -179,4 +180,3 @@ class WbParserSearch(WbParserBase):
         except TypeError:
             print(
                 'Ошибка! Возможно не верно указан раздел. Удалите все доп фильтры с ссылки')
-
